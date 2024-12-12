@@ -1107,8 +1107,8 @@ MonoBehaviour:
   segmentPrefab: {fileID: 4726879341727194397, guid: a20ea67b69b1572478630ab80ef547fd,
     type: 3}
   direction: {x: 1, y: 0}
-  speed: 20
-  speedMultiplier: 1
+  speed: 15
+  speedMultiplier: 2
   initialSize: 4
   moveThroughWalls: 1
 --- !u!1 &1487117391
@@ -1300,6 +1300,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 476918944}
     m_Modifications:
+    - target: {fileID: 140890774121719075, guid: 7bf5dac0fd399144aa9af44e2c6c4bce,
+        type: 3}
+      propertyPath: m_text
+      value: Score:0
+      objectReference: {fileID: 0}
     - target: {fileID: 6588923622332876728, guid: 7bf5dac0fd399144aa9af44e2c6c4bce,
         type: 3}
       propertyPath: m_Name

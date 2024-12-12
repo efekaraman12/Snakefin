@@ -22,38 +22,55 @@ public class Snake : MonoBehaviour
         lastMousePosition = Input.mousePosition;
     }
 
+    private Vector2 swipeStart; // Tracks the start of a swipe
+
     private void Update()
     {
-        Vector2 currentMousePosition = Input.mousePosition;
-        Vector2 mouseDelta = currentMousePosition - lastMousePosition;
-
-        // Sağ/Sol veya Yukarı/Aşağı hareketi kontrol et
-        if (direction.x != 0) // Sağ/Sol hareket ederken
+        if (Input.touchCount > 0)
         {
-            if (mouseDelta.y > 10f) // Fare yukarı hareket ederse
+            Touch touch = Input.GetTouch(0);
+
+            if (touch.phase == TouchPhase.Began)
             {
-                input = Vector2Int.up;
+                // Capture the starting point of the swipe
+                swipeStart = touch.position;
             }
-            else if (mouseDelta.y < -10f) // Fare aşağı hareket ederse
+            else if (touch.phase == TouchPhase.Ended)
             {
-                input = Vector2Int.down;
+                // Capture the end point of the swipe
+                Vector2 swipeEnd = touch.position;
+                Vector2 swipeDelta = swipeEnd - swipeStart;
+
+                // Check the direction of the swipe
+                if (Mathf.Abs(swipeDelta.x) > Mathf.Abs(swipeDelta.y))
+                {
+                    // Horizontal swipe
+                    if (swipeDelta.x > 0 && direction != Vector2Int.left)
+                    {
+                        direction = Vector2Int.right;
+                    }
+                    else if (swipeDelta.x < 0 && direction != Vector2Int.right)
+                    {
+                        direction = Vector2Int.left;
+                    }
+                }
+                else
+                {
+                    // Vertical swipe
+                    if (swipeDelta.y > 0 && direction != Vector2Int.down)
+                    {
+                        direction = Vector2Int.up;
+                    }
+                    else if (swipeDelta.y < 0 && direction != Vector2Int.up)
+                    {
+                        direction = Vector2Int.down;
+                    }
+                }
             }
         }
-        else if (direction.y != 0) // Yukarı/Aşağı hareket ederken
-        {
-            if (mouseDelta.x > 10f) // Fare sağa hareket ederse
-            {
-                input = Vector2Int.right;
-            }
-            else if (mouseDelta.x < -10f) // Fare sola hareket ederse
-            {
-                input = Vector2Int.left;
-            }
-        }
-
-        // Son fare pozisyonunu güncelle
-        lastMousePosition = currentMousePosition;
     }
+
+
 
     private void FixedUpdate()
     {
