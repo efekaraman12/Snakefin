@@ -1,60 +1,45 @@
 ﻿using UnityEngine;
 
-[RequireComponent(typeof(BoxCollider2D))]
 public class Food : MonoBehaviour
 {
-    public float rotationSpeed = 100f;
-    private Snake snake;
-
-    private void Awake()
-    {
-        snake = FindObjectOfType<Snake>();
-    }
+    public float spawnAreaSize = 10f; // Yiyeceğin spawnlanabileceği alanın boyutu
+    public float rotationSpeed = 100f; // Z ekseninde dönüş hızı
 
     private void Start()
     {
-        RandomizePosition();
+        // Başlangıçta rastgele bir pozisyonda spawnlan
+        SpawnAtRandomPosition();
     }
 
     private void Update()
     {
-        transform.Rotate(0, rotationSpeed * Time.deltaTime, 0);
-    }
-
-    public void RandomizePosition()
-    {
-        if (GameManager.Instance == null) return;
-
-        Vector2 playableArea = GameManager.Instance.GetPlayableArea();
-        float wallThickness = GameManager.Instance.baseWallThickness;
-
-        // Duvar kalınlığını hesaba katarak spawn alanını belirle
-        float maxX = playableArea.x - wallThickness;
-        float maxY = playableArea.y - wallThickness;
-
-        // Tam sayı pozisyonlarda spawn ol
-        int x = Mathf.RoundToInt(Random.Range(-maxX, maxX));
-        int y = Mathf.RoundToInt(Random.Range(-maxY, maxY));
-
-        // Yılanın üzerinde spawn olmadığından emin ol
-        while (snake != null && snake.Occupies(x, y))
-        {
-            x = Mathf.RoundToInt(Random.Range(-maxX, maxX));
-            y = Mathf.RoundToInt(Random.Range(-maxY, maxY));
-        }
-
-        transform.position = new Vector2(x, y);
+        // Z ekseninde döndür
+        transform.Rotate(0, 0, rotationSpeed * Time.deltaTime);
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
+        // Eğer çarpan obje "SnakeHead" tag'ine sahipse
         if (other.CompareTag("SnakeHead"))
         {
-            RandomizePosition();
+            // Skoru artır
             if (ScoreManager.Instance != null)
             {
                 ScoreManager.Instance.AddScore(1);
             }
+
+            // Yeni bir pozisyonda spawnlan
+            SpawnAtRandomPosition();
         }
+    }
+
+    private void SpawnAtRandomPosition()
+    {
+        // Rastgele bir pozisyon belirle
+        float randomX = Random.Range(-spawnAreaSize, spawnAreaSize);
+        float randomY = Random.Range(-spawnAreaSize, spawnAreaSize);
+
+        // Pozisyonu uygula
+        transform.position = new Vector2(Mathf.Round(randomX), Mathf.Round(randomY));
     }
 }

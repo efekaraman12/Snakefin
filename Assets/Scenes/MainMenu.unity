@@ -151,7 +151,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 634fbeaafa9adb942a73d379fbe7952e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  backgroundImage: {fileID: 0}
+  backgroundImage: {fileID: 2116802006}
   buttonsContainer: {fileID: 1853003868}
   playButton: {fileID: 838891659}
   exitButton: {fileID: 497905944}
@@ -454,16 +454,10 @@ MonoBehaviour:
   bottomWall: {fileID: 0}
   leftWall: {fileID: 0}
   rightWall: {fileID: 0}
+  scorePanel: {fileID: 1853003869}
   mainCamera: {fileID: 929349811}
-  scorePanel: {fileID: 0}
-  gameBackground: {fileID: 0}
-  uiBackground: {fileID: 2116802005}
-  mainCanvas: {fileID: 886612984}
-  wallThickness: 1
+  baseWallThickness: 0.5
   scorePanelTopMargin: 20
-  maintainAspectRatio: 0
-  portraitAspectRatio: 0.5625
-  landscapeAspectRatio: 1.7777778
 --- !u!4 &674314690
 Transform:
   m_ObjectHideFlags: 0
@@ -842,7 +836,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 117}
+  m_AnchoredPosition: {x: 0, y: 9}
   m_SizeDelta: {x: 300, y: 151.04}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1853003870
@@ -910,7 +904,7 @@ RectTransform:
   m_GameObject: {fileID: 2116802004}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 10.936749, y: 19.020435, z: 19.020435}
+  m_LocalScale: {x: 12.676787, y: 22.046587, z: 22.046587}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 886612985}

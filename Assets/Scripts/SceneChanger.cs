@@ -11,28 +11,17 @@ public class SceneChanger : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        if (scene.buildIndex == 1) // Oyun sahnesi
+        if (scene.buildIndex == 1)
         {
-            if (GameManager.Instance != null)
-            {
-                // Kýsa bir gecikme ile initialize et
-                Invoke("InitializeGameScene", 0.2f);
-            }
+            GameManager.Instance.InitializeGameScene(); // Sahne baþlatýlýyor
+            GameManager.Instance.AdjustGameArea(); // Duvarlar ve UI ayarlanýyor
             SceneManager.sceneLoaded -= OnSceneLoaded;
-        }
-    }
-
-    private void InitializeGameScene()
-    {
-        if (GameManager.Instance != null)
-        {
-            GameManager.Instance.InitializeGameScene();
         }
     }
 
     public void ExitGame()
     {
         Application.Quit();
-        Debug.Log("Quit");
+        Debug.Log("Game exited.");
     }
 }
