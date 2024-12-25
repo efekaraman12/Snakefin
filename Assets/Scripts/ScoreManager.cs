@@ -1,6 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
-using TMPro; // TextMeshPro kütüphanesi
+using TMPro;
 using UnityEngine;
 
 public class ScoreManager : MonoBehaviour
@@ -9,15 +7,14 @@ public class ScoreManager : MonoBehaviour
 
     private int score;
 
-    [SerializeField] private TextMeshProUGUI scoreText; // TextMeshPro UI öðesi
+    [SerializeField] private TextMeshProUGUI scoreText;
 
     private void Awake()
     {
-        // Ensure there is only one instance of ScoreManager
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject); // Keep this object across scenes
+            DontDestroyOnLoad(gameObject);
         }
         else
         {
@@ -41,8 +38,17 @@ public class ScoreManager : MonoBehaviour
     {
         if (scoreText != null)
         {
-            scoreText.text = "Score: " + score.ToString();
+            scoreText.text = score.ToString();
+
+            // Score text'in her zaman üstte kalmasýný saðla
+            RectTransform rectTransform = scoreText.GetComponent<RectTransform>();
+            if (rectTransform != null)
+            {
+                rectTransform.anchorMin = new Vector2(0.5f, 1f);
+                rectTransform.anchorMax = new Vector2(0.5f, 1f);
+                rectTransform.pivot = new Vector2(0.5f, 1f);
+                rectTransform.anchoredPosition = new Vector2(0, -20f); // Üstten 20 piksel boþluk
+            }
         }
     }
 }
-

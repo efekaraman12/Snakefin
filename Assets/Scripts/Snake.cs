@@ -9,6 +9,11 @@ public class Snake : MonoBehaviour
     public float speedMultiplier = 1f;
     public int initialSize = 4;
     public bool moveThroughWalls = false;
+    public AudioSource audioSource;
+    public AudioClip collectSound;
+    public AudioClip moveSound;
+    public SpriteRenderer backgroundSprite;
+
 
     private readonly List<Transform> segments = new List<Transform>();
     private Vector2Int input;
@@ -16,10 +21,43 @@ public class Snake : MonoBehaviour
     private Vector2 touchStartPosition;
     private bool isDragging = false;
     private float minSwipeDistance = 50f;
+    private Camera mainCamera;
 
     private void Start()
     {
+        mainCamera = Camera.main;
         ResetState();
+        ResizeBackground();
+    }
+
+    private void ResizeBackground()
+    {
+        if (backgroundSprite == null || mainCamera == null) return;
+
+        float height = 2f * mainCamera.orthographicSize;
+        float width = height * mainCamera.aspect;
+
+        float spriteWidth = backgroundSprite.sprite.bounds.size.x;
+        float spriteHeight = backgroundSprite.sprite.bounds.size.y;
+
+        float scaleX = width / spriteWidth;
+        float scaleY = height / spriteHeight;
+
+        backgroundSprite.transform.localScale = new Vector3(scaleX, scaleY, 1f);
+    }
+
+    private void OnRectTransformDimensionsChange()
+    {
+        ResizeBackground();
+    }
+
+    private void OnValidate()
+    {
+        if (backgroundSprite != null && Camera.main != null)
+        {
+            mainCamera = Camera.main;
+            ResizeBackground();
+        }
     }
 
     private void Update()
@@ -29,7 +67,6 @@ public class Snake : MonoBehaviour
 
     private void HandleInput()
     {
-        // Touch Kontrolü
         if (Input.touchCount > 0)
         {
             Touch touch = Input.GetTouch(0);
@@ -62,12 +99,12 @@ public class Snake : MonoBehaviour
         }
 
 #if UNITY_EDITOR || UNITY_STANDALONE
-        if (Input.GetMouseButtonDown(0)) // Mouse sol tuşuna basıldı
+        if (Input.GetMouseButtonDown(0))
         {
             touchStartPosition = Input.mousePosition;
             isDragging = true;
         }
-        else if (Input.GetMouseButton(0) && isDragging) // Mouse sürükleniyor
+        else if (Input.GetMouseButton(0) && isDragging)
         {
             Vector2 swipeDelta = (Vector2)Input.mousePosition - touchStartPosition;
 
@@ -77,7 +114,7 @@ public class Snake : MonoBehaviour
                 touchStartPosition = Input.mousePosition;
             }
         }
-        else if (Input.GetMouseButtonUp(0)) // Mouse sol tuşu bırakıldı
+        else if (Input.GetMouseButtonUp(0))
         {
             isDragging = false;
         }
@@ -118,6 +155,11 @@ public class Snake : MonoBehaviour
         {
             direction = input;
             input = Vector2Int.zero;
+
+            if (audioSource != null && moveSound != null)
+            {
+                audioSource.PlayOneShot(moveSound);
+            }
         }
 
         for (int i = segments.Count - 1; i > 0; i--)
@@ -129,8 +171,8 @@ public class Snake : MonoBehaviour
         int y = Mathf.RoundToInt(transform.position.y) + direction.y;
         transform.position = new Vector2(x, y);
 
-        UpdateHeadRotation(); // Kafanın dönüşünü güncelle
-        CheckSelfCollision(); // Kendine çarpma kontrolü
+        UpdateHeadRotation();
+        CheckSelfCollision();
 
         nextUpdate = Time.time + (1f / (speed * speedMultiplier));
     }
@@ -141,22 +183,21 @@ public class Snake : MonoBehaviour
 
         if (direction == Vector2Int.up)
         {
-            targetAngle = 90f; // Yukarı
+            targetAngle = 90f;
         }
         else if (direction == Vector2Int.down)
         {
-            targetAngle = -90f; // Aşağı
+            targetAngle = -90f;
         }
         else if (direction == Vector2Int.left)
         {
-            targetAngle = 180f; // Sola
+            targetAngle = 180f;
         }
         else if (direction == Vector2Int.right)
         {
-            targetAngle = 0f; // Sağa
+            targetAngle = 0f;
         }
 
-        // Kafanın rotasyonunu ayarla
         transform.rotation = Quaternion.Euler(0, 0, targetAngle);
     }
 
@@ -167,7 +208,7 @@ public class Snake : MonoBehaviour
             if (segments[i].position == transform.position)
             {
                 Debug.Log("Yılan kendine çarptı!");
-                ResetState(); // Kendine çarptığında resetle
+                ResetState();
                 break;
             }
         }
@@ -175,7 +216,6 @@ public class Snake : MonoBehaviour
 
     public void Grow()
     {
-        // Yeni segmenti kuyruğun son pozisyonuna ekler
         Transform segment = Instantiate(segmentPrefab);
         segment.position = segments[segments.Count - 1].position;
         segments.Add(segment);
@@ -186,10 +226,8 @@ public class Snake : MonoBehaviour
         direction = Vector2Int.right;
         transform.position = Vector3.zero;
 
-        // Skoru sıfırla
         ScoreManager.Instance.AddScore(-ScoreManager.Instance.GetScore());
 
-        // Segmentleri temizle
         for (int i = 1; i < segments.Count; i++)
         {
             Destroy(segments[i].gameObject);
@@ -198,7 +236,6 @@ public class Snake : MonoBehaviour
         segments.Clear();
         segments.Add(transform);
 
-        // Başlangıç boyutunda segment ekle
         for (int i = 0; i < initialSize - 1; i++)
         {
             Grow();
@@ -222,7 +259,11 @@ public class Snake : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Food"))
         {
-            Grow(); // Yalnızca burada segment ekliyoruz
+            Grow();
+            if (audioSource != null && collectSound != null)
+            {
+                audioSource.PlayOneShot(collectSound);
+            }
         }
         else if (other.gameObject.CompareTag("Obstacle"))
         {

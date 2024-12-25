@@ -3,7 +3,7 @@
 [RequireComponent(typeof(BoxCollider2D))]
 public class Food : MonoBehaviour
 {
-    public Collider2D gridArea;
+    public float rotationSpeed = 100f;
     private Snake snake;
 
     private void Awake()
@@ -16,30 +16,31 @@ public class Food : MonoBehaviour
         RandomizePosition();
     }
 
+    private void Update()
+    {
+        transform.Rotate(0, rotationSpeed * Time.deltaTime, 0);
+    }
+
     public void RandomizePosition()
     {
-        Bounds bounds = gridArea.bounds;
+        if (GameManager.Instance == null) return;
 
-        // Pick a random position inside the bounds
-        // Round the values to ensure it aligns with the grid
-        int x = Mathf.RoundToInt(Random.Range(bounds.min.x, bounds.max.x));
-        int y = Mathf.RoundToInt(Random.Range(bounds.min.y, bounds.max.y));
+        Vector2 playableArea = GameManager.Instance.GetPlayableArea();
+        float wallThickness = GameManager.Instance.baseWallThickness;
 
-        // Prevent the food from spawning on the snake
-        while (snake.Occupies(x, y))
+        // Duvar kalınlığını hesaba katarak spawn alanını belirle
+        float maxX = playableArea.x - wallThickness;
+        float maxY = playableArea.y - wallThickness;
+
+        // Tam sayı pozisyonlarda spawn ol
+        int x = Mathf.RoundToInt(Random.Range(-maxX, maxX));
+        int y = Mathf.RoundToInt(Random.Range(-maxY, maxY));
+
+        // Yılanın üzerinde spawn olmadığından emin ol
+        while (snake != null && snake.Occupies(x, y))
         {
-            x++;
-
-            if (x > bounds.max.x)
-            {
-                x = Mathf.RoundToInt(bounds.min.x);
-                y++;
-
-                if (y > bounds.max.y)
-                {
-                    y = Mathf.RoundToInt(bounds.min.y);
-                }
-            }
+            x = Mathf.RoundToInt(Random.Range(-maxX, maxX));
+            y = Mathf.RoundToInt(Random.Range(-maxY, maxY));
         }
 
         transform.position = new Vector2(x, y);
@@ -49,8 +50,11 @@ public class Food : MonoBehaviour
     {
         if (other.CompareTag("SnakeHead"))
         {
-            RandomizePosition(); // Yeni pozisyon oluştur
-            ScoreManager.Instance.AddScore(1); // Skoru artır
+            RandomizePosition();
+            if (ScoreManager.Instance != null)
+            {
+                ScoreManager.Instance.AddScore(1);
+            }
         }
     }
 }
