@@ -13,15 +13,33 @@ public class SceneChanger : MonoBehaviour
     {
         if (scene.buildIndex == 1)
         {
-            GameManager.Instance.InitializeGameScene(); // Sahne baþlatýlýyor
-            GameManager.Instance.AdjustGameArea(); // Duvarlar ve UI ayarlanýyor
-            SceneManager.sceneLoaded -= OnSceneLoaded;
+            GameManager.Instance.InitializeGameScene(); // Yeni sahne baþlatýlýyor
+            GameManager.Instance.AdjustGameArea(); // Duvarlar ve UI güncelleniyor
+
+            Debug.Log("Oyun sahnesi yüklendi.");
         }
+
+        SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
     public void ExitGame()
     {
         Application.Quit();
         Debug.Log("Game exited.");
+    }
+
+
+    public void ReturnToMainMenu()
+    {
+        int currentScore = ScoreManager.Instance.GetScore();
+
+        // Highscore'u güncelle
+        int highScore = PlayerPrefs.GetInt("HighScore", 0);
+        if (currentScore > highScore)
+        {
+            PlayerPrefs.SetInt("HighScore", currentScore);
+        }
+
+        SceneManager.LoadScene(0); // Ana menü sahnesi
     }
 }

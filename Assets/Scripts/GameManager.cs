@@ -1,4 +1,4 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
@@ -9,10 +9,14 @@ public class GameManager : MonoBehaviour
     public Transform leftWall;
     public Transform rightWall;
     public RectTransform scorePanel;
+    public SpriteRenderer background; // Arka plan iÃ§in SpriteRenderer
+
     public Camera mainCamera;
 
     public float baseWallThickness = 0.5f;
     public float scorePanelTopMargin = 20f;
+
+    private ScreenOrientation lastOrientation;
 
     private void Awake()
     {
@@ -30,14 +34,23 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         AdjustGameArea();
+        lastOrientation = Screen.orientation;
+    }
+
+    private void Update()
+    {
+        if (Screen.orientation != lastOrientation)
+        {
+            AdjustGameArea();
+            lastOrientation = Screen.orientation;
+            Debug.Log("Ekran yÃ¶nÃ¼ deÄŸiÅŸti: " + Screen.orientation);
+        }
     }
 
     public void InitializeGameScene()
     {
-        // Kamera referansýný al
         mainCamera = Camera.main;
 
-        // Duvar referanslarýný bul
         GameObject[] walls = GameObject.FindGameObjectsWithTag("Wall");
         foreach (GameObject wall in walls)
         {
@@ -47,11 +60,16 @@ public class GameManager : MonoBehaviour
             else if (wall.name.Contains("Right")) rightWall = wall.transform;
         }
 
-        // Skor panelini bul
         GameObject scoreObj = GameObject.FindGameObjectWithTag("ScorePanel");
         if (scoreObj != null)
         {
             scorePanel = scoreObj.GetComponent<RectTransform>();
+        }
+
+        GameObject backgroundObj = GameObject.FindGameObjectWithTag("Background");
+        if (backgroundObj != null)
+        {
+            background = backgroundObj.GetComponent<SpriteRenderer>();
         }
     }
 
@@ -64,42 +82,35 @@ public class GameManager : MonoBehaviour
 
         AdjustWalls(horzExtent, vertExtent);
         AdjustUI();
+        AdjustBackground(horzExtent, vertExtent); // Arka planÄ± gÃ¼ncelle
     }
 
     private void AdjustWalls(float horzExtent, float vertExtent)
     {
-        // Offset, duvarlarý biraz daha dýþarý taþýr
-        float offset = 0.1f;
-
-        Vector3 topPos = new Vector3(0, vertExtent + offset, 0);
-        Vector3 bottomPos = new Vector3(0, -vertExtent - offset, 0);
-        Vector3 leftPos = new Vector3(-horzExtent - offset, 0, 0);
-        Vector3 rightPos = new Vector3(horzExtent + offset, 0, 0);
-
-        Vector3 horizontalScale = new Vector3((horzExtent + offset) * 2, baseWallThickness, 1);
-        Vector3 verticalScale = new Vector3(baseWallThickness, (vertExtent + offset) * 2, 1);
+        Vector3 horizontalScale = new Vector3(horzExtent * 2, baseWallThickness, 1);
+        Vector3 verticalScale = new Vector3(baseWallThickness, vertExtent * 2, 1);
 
         if (topWall != null)
         {
-            topWall.position = topPos;
+            topWall.position = new Vector3(0, vertExtent, 0);
             topWall.localScale = horizontalScale;
         }
 
         if (bottomWall != null)
         {
-            bottomWall.position = bottomPos;
+            bottomWall.position = new Vector3(0, -vertExtent, 0);
             bottomWall.localScale = horizontalScale;
         }
 
         if (leftWall != null)
         {
-            leftWall.position = leftPos;
+            leftWall.position = new Vector3(-horzExtent, 0, 0);
             leftWall.localScale = verticalScale;
         }
 
         if (rightWall != null)
         {
-            rightWall.position = rightPos;
+            rightWall.position = new Vector3(horzExtent, 0, 0);
             rightWall.localScale = verticalScale;
         }
     }
@@ -117,10 +128,17 @@ public class GameManager : MonoBehaviour
         scorePanel.anchoredPosition = new Vector2(0, -topMargin);
     }
 
-    public Vector2 GetPlayableArea()
+    private void AdjustBackground(float horzExtent, float vertExtent)
     {
-        float vertExtent = mainCamera.orthographicSize;
-        float horzExtent = vertExtent * Screen.width / Screen.height;
-        return new Vector2(horzExtent, vertExtent);
+        if (background == null) return;
+
+        // Arka planÄ± ekran boyutuna gÃ¶re Ã¶lÃ§ekle
+        float bgScale = Mathf.Max(
+            (vertExtent * 2) / background.sprite.bounds.size.y,
+            (horzExtent * 2) / background.sprite.bounds.size.x
+        );
+
+        background.transform.localScale = new Vector3(bgScale, bgScale, 1);
+        background.transform.position = Vector3.zero; // OrtalanmÄ±ÅŸ pozisyon
     }
 }
