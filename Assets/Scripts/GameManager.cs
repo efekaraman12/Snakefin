@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour
     public Transform leftWall;
     public Transform rightWall;
     public RectTransform scorePanel;
+
     public SpriteRenderer background; // Arka plan için SpriteRenderer
 
     public Camera mainCamera;
@@ -17,6 +18,9 @@ public class GameManager : MonoBehaviour
     public float scorePanelTopMargin = 20f;
 
     private ScreenOrientation lastOrientation;
+
+    private AudioSource audioSource; // Arka plan müziği için AudioSource
+    public AudioClip backgroundMusic; // Atanacak müzik dosyası
 
     private void Awake()
     {
@@ -28,6 +32,17 @@ public class GameManager : MonoBehaviour
         else
         {
             Destroy(gameObject);
+        }
+
+        // AudioSource bileşeni ekleniyor ve müzik başlatılıyor
+        audioSource = gameObject.AddComponent<AudioSource>();
+        audioSource.loop = true;
+        audioSource.playOnAwake = true;
+        audioSource.volume = 0.5f; // Ses seviyesi ayarlanabilir
+        if (backgroundMusic != null)
+        {
+            audioSource.clip = backgroundMusic;
+            audioSource.Play();
         }
     }
 

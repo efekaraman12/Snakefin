@@ -1,45 +1,37 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.Runtime.InteropServices;
 
 public class SceneChanger : MonoBehaviour
 {
+    [DllImport("__Internal")]
+    private static extern void SendGameSessionEvent(string eventName, string payload);
+
     public void StartGame()
     {
-        SceneManager.LoadScene(1);
-        SceneManager.sceneLoaded += OnSceneLoaded;
-    }
+        SendGameSessionEvent("game_start", "{}");
+        Debug.Log("Game started!");
 
-    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-    {
-        if (scene.buildIndex == 1)
-        {
-            GameManager.Instance.InitializeGameScene(); // Yeni sahne baþlatýlýyor
-            GameManager.Instance.AdjustGameArea(); // Duvarlar ve UI güncelleniyor
-
-            Debug.Log("Oyun sahnesi yüklendi.");
-        }
-
-        SceneManager.sceneLoaded -= OnSceneLoaded;
+        SceneManager.LoadScene("Snake");
     }
 
     public void ExitGame()
     {
+        SendGameSessionEvent("game_exit", "{\"reason\": \"user_quit\"}");
+        Debug.Log("Game exited!");
+
+#if UNITY_WEBGL
+        Application.ExternalEval("console.log('Game Quit Triggered');");
+#else
         Application.Quit();
-        Debug.Log("Game exited.");
+#endif
     }
 
-
-    public void ReturnToMainMenu()
+    public void ReturnMenu()
     {
-        int currentScore = ScoreManager.Instance.GetScore();
-
-        // Highscore'u güncelle
-        int highScore = PlayerPrefs.GetInt("HighScore", 0);
-        if (currentScore > highScore)
-        {
-            PlayerPrefs.SetInt("HighScore", currentScore);
-        }
-
-        SceneManager.LoadScene(0); // Ana menü sahnesi
+        SceneManager.LoadScene("MainMenu");
     }
+
+
+
 }

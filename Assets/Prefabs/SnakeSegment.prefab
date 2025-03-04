@@ -29,7 +29,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.5618508, y: 1.5618508, z: 1.5618508}
+  m_LocalScale: {x: 1.8178959, y: 1.8178959, z: 1.8178959}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2107821529985098029}
@@ -76,15 +76,15 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: 84fe61cb33f64e64cbae641250423554, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.2, y: 0.2}
+  m_Size: {x: 0.64, y: 0.64}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 0
+  m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!50 &4726879341727194399
@@ -151,7 +151,7 @@ BoxCollider2D:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
     oldSize: {x: 0.64, y: 0.64}
-    newSize: {x: 0.2, y: 0.2}
+    newSize: {x: 0.64, y: 0.64}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
@@ -175,18 +175,18 @@ PrefabInstance:
     - target: {fileID: 5416817459642156171, guid: 65923dc165902164d87aa4c7436a38ed,
         type: 3}
       propertyPath: m_SpriteTilingProperty.oldSize.x
-      value: 0.64
+      value: 5.54
       objectReference: {fileID: 0}
     - target: {fileID: 5416817459642156171, guid: 65923dc165902164d87aa4c7436a38ed,
         type: 3}
       propertyPath: m_SpriteTilingProperty.oldSize.y
-      value: 0.64
+      value: 5.02
       objectReference: {fileID: 0}
     - target: {fileID: 6816846227391772018, guid: 65923dc165902164d87aa4c7436a38ed,
         type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: 84fe61cb33f64e64cbae641250423554,
+      objectReference: {fileID: 21300000, guid: 8291c8a6b9719be4db35cac07249bbd4,
         type: 3}
     - target: {fileID: 6816846227391772018, guid: 65923dc165902164d87aa4c7436a38ed,
         type: 3}
@@ -211,17 +211,17 @@ PrefabInstance:
     - target: {fileID: 8441754519620027425, guid: 65923dc165902164d87aa4c7436a38ed,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 1.1740199
+      value: 0.20614706
       objectReference: {fileID: 0}
     - target: {fileID: 8441754519620027425, guid: 65923dc165902164d87aa4c7436a38ed,
         type: 3}
       propertyPath: m_LocalScale.y
-      value: 1.1740199
+      value: 0.20614706
       objectReference: {fileID: 0}
     - target: {fileID: 8441754519620027425, guid: 65923dc165902164d87aa4c7436a38ed,
         type: 3}
       propertyPath: m_LocalScale.z
-      value: 1.1740199
+      value: 0.20614706
       objectReference: {fileID: 0}
     - target: {fileID: 8441754519620027425, guid: 65923dc165902164d87aa4c7436a38ed,
         type: 3}
