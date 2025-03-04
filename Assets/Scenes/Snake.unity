@@ -2102,7 +2102,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_fontAsset
       value: 
-      objectReference: {fileID: 11400000, guid: e924657a838b3214d8ac4a87cb5090fb,
+      objectReference: {fileID: 11400000, guid: 631295776da2b2a46b0aa0074500953a,
         type: 2}
     - target: {fileID: 140890774121719075, guid: 7bf5dac0fd399144aa9af44e2c6c4bce,
         type: 3}
@@ -2117,23 +2117,23 @@ PrefabInstance:
     - target: {fileID: 140890774121719075, guid: 7bf5dac0fd399144aa9af44e2c6c4bce,
         type: 3}
       propertyPath: m_fontColor.b
-      value: 0.7169812
-      objectReference: {fileID: 0}
-    - target: {fileID: 140890774121719075, guid: 7bf5dac0fd399144aa9af44e2c6c4bce,
-        type: 3}
-      propertyPath: m_fontColor.g
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 140890774121719075, guid: 7bf5dac0fd399144aa9af44e2c6c4bce,
         type: 3}
+      propertyPath: m_fontColor.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 140890774121719075, guid: 7bf5dac0fd399144aa9af44e2c6c4bce,
+        type: 3}
       propertyPath: m_fontColor.r
-      value: 0.24172103
+      value: 0.05281806
       objectReference: {fileID: 0}
     - target: {fileID: 140890774121719075, guid: 7bf5dac0fd399144aa9af44e2c6c4bce,
         type: 3}
       propertyPath: m_sharedMaterial
       value: 
-      objectReference: {fileID: 3133766197913140573, guid: e924657a838b3214d8ac4a87cb5090fb,
+      objectReference: {fileID: 1198703481349277787, guid: 631295776da2b2a46b0aa0074500953a,
         type: 2}
     - target: {fileID: 140890774121719075, guid: 7bf5dac0fd399144aa9af44e2c6c4bce,
         type: 3}
@@ -2143,7 +2143,7 @@ PrefabInstance:
     - target: {fileID: 140890774121719075, guid: 7bf5dac0fd399144aa9af44e2c6c4bce,
         type: 3}
       propertyPath: m_fontColor32.rgba
-      value: 4290183230
+      value: 4278255373
       objectReference: {fileID: 0}
     - target: {fileID: 140890774121719075, guid: 7bf5dac0fd399144aa9af44e2c6c4bce,
         type: 3}
